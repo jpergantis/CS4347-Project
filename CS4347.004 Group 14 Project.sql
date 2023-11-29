@@ -56,6 +56,16 @@ CREATE TABLE Person (
 	PRIMARY KEY (PersonId)
 );
 
+CREATE TABLE PhoneNumber (
+	-- Attributes
+	PhoneNumber CHAR(10) NOT NULL,
+	PersonId INTEGER NOT NULL
+
+	-- Keys and constraints
+	PRIMARY KEY (PhoneNumber),
+	FOREIGN KEY (PersonId) REFERENCES Person(PersonId)
+);
+
 CREATE TABLE Employee (
 	-- Attributes
 	PersonId INTEGER NOT NULL,
@@ -133,7 +143,7 @@ CREATE TABLE JobPosition (
 	-- Keys and constraints
 	PRIMARY KEY (JobId),
 	FOREIGN KEY (DepartmentId) REFERENCES Department(DepartmentId)
-)
+);
 
 
 -- Applicant tables need some work. Since an applicant could be an employee or a potential employee, how to handle?
@@ -145,7 +155,7 @@ CREATE TABLE Applicant (
 	-- Keys and constraints
 	PRIMARY KEY (ApplicantId),
 	FOREIGN KEY (JobId) REFERENCES JobPosition(JobId)
-)
+);
 
 CREATE TABLE ExternalApplicant (
 	-- Attributes
@@ -156,7 +166,7 @@ CREATE TABLE ExternalApplicant (
 	PRIMARY KEY (PotentialEmployeeId, ApplicantId),
 	FOREIGN KEY (PotentialEmployeeId) REFERENCES PotentialEmployee(PersonId),
 	FOREIGN KEY (ApplicantId) REFERENCES Applicant(ApplicantId)
-)
+);
 
 CREATE TABLE InternalApplicant (
 	-- Attributes
@@ -167,7 +177,7 @@ CREATE TABLE InternalApplicant (
 	PRIMARY KEY (EmployeeId, ApplicantId),
 	FOREIGN KEY (EmployeeId) REFERENCES Employee(PersonId),
 	FOREIGN KEY (ApplicantId) REFERENCES Applicant(ApplicantId)
-)
+);
 
 CREATE TABLE Interview (
 	-- Attributes
@@ -180,7 +190,7 @@ CREATE TABLE Interview (
 	PRIMARY KEY (JobId, ApplicantId, InterviewDateTime),
 	FOREIGN KEY (JobId) REFERENCES JobPosition(JobId),
 	FOREIGN KEY (ApplicantId) REFERENCES Applicant(ApplicantId)
-)
+);
 
 CREATE TABLE MarketingSite (
 	-- Attributes
@@ -190,7 +200,7 @@ CREATE TABLE MarketingSite (
 
 	-- Keys and constraints
 	PRIMARY KEY (SiteId)
-)
+);
 
 CREATE TABLE EmployeeSiteMembership (
 	-- Attributes
@@ -201,7 +211,7 @@ CREATE TABLE EmployeeSiteMembership (
 	PRIMARY KEY (SiteId, EmployeeId),
 	FOREIGN KEY (SiteId) REFERENCES MarketingSite(SiteId),
 	FOREIGN KEY (EmployeeId) REFERENCES Employee(PersonId)
-)
+);
 
 CREATE TABLE Sale (
 	-- Attributes
@@ -211,7 +221,7 @@ CREATE TABLE Sale (
 
 	-- Keys and constraints
 	PRIMARY KEY (SaleId)
-)
+);
 
 CREATE TABLE SalesPersonSaleMembership (
 	-- Attributes
@@ -222,7 +232,7 @@ CREATE TABLE SalesPersonSaleMembership (
 	PRIMARY KEY (SaleId, EmployeeId),
 	FOREIGN KEY (SaleId) REFERENCES Sale(SaleId),
 	FOREIGN KEY (EmployeeId) REFERENCES Employee(PersonId)
-)
+);
 
 CREATE TABLE CustomerSaleMembership (
 	-- Attributes
@@ -233,7 +243,7 @@ CREATE TABLE CustomerSaleMembership (
 	PRIMARY KEY (SaleId, CustomerId),
 	FOREIGN KEY (SaleId) REFERENCES Sale(SaleId),
 	FOREIGN KEY (CustomerId) REFERENCES Customer(PersonId)
-)
+);
 
 CREATE TABLE SiteSaleMembership (
 	-- Attributes
@@ -244,7 +254,7 @@ CREATE TABLE SiteSaleMembership (
 	PRIMARY KEY (SaleId, SiteId),
 	FOREIGN KEY (SaleId) REFERENCES Sale(SaleId),
 	FOREIGN KEY (SiteId) REFERENCES MarketingSite(SiteId)
-)
+);
 
 CREATE TABLE Vendor (
 	-- Attributes
@@ -262,7 +272,7 @@ CREATE TABLE Vendor (
 	-- Keys and constraints
 	PRIMARY KEY (VendorId),
 	CONSTRAINT CreditRatingRange CHECK(CreditRating >= 300 and CreditRating <= 850) -- Valid ranges for credit ratings
-)
+);
 
 CREATE TABLE Product (
 	-- Attributes
@@ -278,7 +288,7 @@ CREATE TABLE Product (
 
 	-- Keys and constraints
 	PRIMARY KEY (ProductId)
-)
+);
 
 CREATE TABLE Part (
 	-- Attributes
@@ -289,7 +299,7 @@ CREATE TABLE Part (
 	-- Keys and constraints
 	PRIMARY KEY (PartId),
 	FOREIGN KEY (VendorId) REFERENCES Vendor(VendorId)
-)
+);
 
 CREATE TABLE PartProductMembership (
 	-- Attributes
@@ -302,5 +312,5 @@ CREATE TABLE PartProductMembership (
 	FOREIGN KEY (PartId) REFERENCES Part(PartId),
 	FOREIGN KEY (ProductId) REFERENCES Product(ProductId),
 	CONSTRAINT PartQuantityPerProduct CHECK(Quantity > 0)
-)
+);
 
